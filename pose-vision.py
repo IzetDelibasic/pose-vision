@@ -5,6 +5,7 @@ import time
 detector = PoseDetector()
 cap = cv2.VideoCapture(0)
 pTime = 0
+is_camera_on = True  
 
 while True:
     success, img = cap.read()
@@ -25,7 +26,15 @@ while True:
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
     
     cv2.imshow("Pose Vision", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    
+    key = cv2.waitKey(1)
+    if key == ord('s'):
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        filename = f"pose_snapshot_{timestamp}.png"
+        cv2.imwrite(filename, img)
+        print(f"Snapshot saved as {filename}")
+    
+    if key == ord('q'):
         break
 
 cap.release()
